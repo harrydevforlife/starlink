@@ -1,5 +1,3 @@
-# #
-
 from abc import ABC, abstractmethod
 
 from starlink.physicalplan.expressions.expr import Expression

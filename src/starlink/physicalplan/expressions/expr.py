@@ -1,5 +1,3 @@
-
-
 from abc import ABC, abstractmethod
 
 import pyarrow as pa

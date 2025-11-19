@@ -1,5 +1,3 @@
-
-
 """SQL Planner
 
 Converts parsed SQL expressions into logical plans.

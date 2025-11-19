@@ -58,15 +58,6 @@ class ProjectionPushDownRule(OptimizerRule):
         if isinstance(plan, Join):
             return self._push_down_join(plan, columnNames)
 
-        # if isinstance(plan, Scan):
-        #     valid_names = {f.name for f in plan.dataSource.schema().fields}
-        #     # Filter and sort inputs consistently
-        #     # Note: Sorting is for optimization display only; execution still respects logical plan order
-        #     pushdown = sorted([name for name in columnNames.keys() if name in valid_names])
-        #     return Scan(plan.path, plan.dataSource, pushdown)
-
-
-
         raise ValueError(f"ProjectionPushDownRule does not support plan: {plan}")
 
     def _push_down_join(self, plan: Join, columnNames: OrderedDict) -> LogicalPlan:

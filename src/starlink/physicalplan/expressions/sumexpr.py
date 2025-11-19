@@ -1,5 +1,3 @@
-
-
 from typing import Any
 
 from starlink.physicalplan.expressions.expr import Expression, Accumulator

@@ -1,5 +1,3 @@
-
-
 from typing import Any, List
 
 import pyarrow as pa

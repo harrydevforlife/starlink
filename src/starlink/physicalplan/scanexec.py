@@ -1,6 +1,3 @@
-# // Copyright 2020 Andy Grove
-
-
 from typing import List, Sequence, Optional
 
 from starlink.datasources.datasource import DataSource
@@ -19,7 +16,6 @@ class ScanExec(PhysicalPlan):
         self.filter = filter
 
     def schema(self) -> Schema:
-        # return self.ds.schema().select(self.projection) if self.projection else self.ds.schema()
         if not self.projection:
             return self.ds.schema()
         source_schema = self.ds.schema()

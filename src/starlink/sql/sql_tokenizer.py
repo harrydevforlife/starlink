@@ -1,5 +1,3 @@
-
-
 from typing import List, Optional, Callable
 
 from starlink.sql.tokens import Token, Literal, Keyword, Symbol, TokenType
@@ -159,9 +157,3 @@ class SqlTokenizer:
             if predicate(self.sql[index]):
                 return index
         return len(self.sql)
-
-
-if __name__ == "__main__":
-    tokenizer = SqlTokenizer("SELECT a + b FROM c")
-    tokens = tokenizer.tokenize()
-    print(tokens)

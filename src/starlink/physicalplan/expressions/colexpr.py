@@ -1,5 +1,3 @@
-
-
 from starlink.physicalplan.expressions.expr import Expression
 from starlink.datatypes.column_vector import ColumnVector
 from starlink.datatypes.record_batch import RecordBatch

@@ -1,5 +1,3 @@
-
-
 from typing import List, Sequence, Iterator
 
 import pyarrow as pa
