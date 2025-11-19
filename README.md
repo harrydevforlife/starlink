@@ -70,7 +70,7 @@ print(df.optimizedPlan().pretty())
 
 # Execute and get results
 result = ctx.execute(df)
-result.to_markdown()
+result.show()
 ```
 The output will be like this:
 ```text
@@ -134,7 +134,7 @@ df = (
 )
 
 result = ctx.execute(df)
-result.to_markdown()
+result.show()
 ```
 
 ## Architecture: The Query Journey
