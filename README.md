@@ -12,8 +12,6 @@ Starlink aims to make query engines **easily understandable for Pythonistas**. I
 SQL → Logical Plan → Optimized Plan → Physical Plan → Data Sources
 ```
 
-This project was inspired by [How Query Engines Work](https://howqueryengineswork.com/00-introduction.html) by Andy Grove, which provides an excellent introduction to query engine concepts. Starlink brings these concepts to Python, making them accessible to the Python community.
-
 ## Inspiration
 
 Special thanks to Andy Grove and [How Query Engines Work](https://howqueryengineswork.com/00-introduction.html) for inspiring this project. The book provides a comprehensive introduction to query engines, and Starlink aims to make these concepts accessible to Python developers through a clean, educational implementation.
