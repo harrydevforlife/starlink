@@ -1,0 +1,19 @@
+Benchmark Results
+========================================================================================================================
+Aggregate: Many groups (100 groups)      | Mean:     9.76ms | Median:     9.65ms | Min:     9.30ms | Max:    10.32ms | Stdev:   0.52ms
+Aggregate: Simple aggregation (5 groups, 3 aggs) | Mean:    13.11ms | Median:    13.14ms | Min:    12.97ms | Max:    13.21ms | Stdev:   0.12ms
+Aggregate: Single group (no grouping)    | Mean:     5.87ms | Median:     5.80ms | Min:     5.62ms | Max:     6.19ms | Stdev:   0.29ms
+CSV: Read all columns (no projection)    | Mean:     2.47ms | Median:     2.39ms | Min:     2.17ms | Max:     2.84ms | Stdev:   0.34ms
+CSV: Read with projection (2 cols)       | Mean:     2.10ms | Median:     2.17ms | Min:     1.85ms | Max:     2.28ms | Stdev:   0.22ms
+CSV: Read with projection (4 cols)       | Mean:     2.12ms | Median:     2.08ms | Min:     2.00ms | Max:     2.28ms | Stdev:   0.14ms
+CSV: Read with small batches (100)       | Mean:     2.64ms | Median:     2.53ms | Min:     2.44ms | Max:     2.94ms | Stdev:   0.27ms
+E2E: Complex query (filter + project + aggregate) | Mean:    71.31ms | Median:    70.66ms | Min:    70.63ms | Max:    72.65ms | Stdev:   1.16ms
+E2E: GROUP BY with aggregation           | Mean:    57.84ms | Median:    58.27ms | Min:    56.84ms | Max:    58.41ms | Stdev:   0.87ms
+E2E: SELECT with WHERE and projection    | Mean:    26.28ms | Median:    26.23ms | Min:    26.19ms | Max:    26.42ms | Stdev:   0.12ms
+Expression: Complex boolean (a>1000 AND b<15000) | Mean:     0.34ms | Median:     0.33ms | Min:     0.33ms | Max:     0.36ms | Stdev:   0.01ms
+Expression: Math expression (a + b)      | Mean:     0.03ms | Median:     0.03ms | Min:     0.02ms | Max:     0.03ms | Stdev:   0.00ms
+Expression: Multiple math expressions    | Mean:     0.16ms | Median:     0.17ms | Min:     0.16ms | Max:     0.17ms | Stdev:   0.01ms
+Expression: Simple comparison (a > 5000) | Mean:     0.19ms | Median:     0.19ms | Min:     0.17ms | Max:     0.21ms | Stdev:   0.02ms
+Filter: Loose filter (90% selectivity)   | Mean:     0.18ms | Median:     0.17ms | Min:     0.16ms | Max:     0.20ms | Stdev:   0.02ms
+Filter: Simple filter (50% selectivity)  | Mean:     0.16ms | Median:     0.16ms | Min:     0.16ms | Max:     0.17ms | Stdev:   0.01ms
+Filter: Tight filter (10% selectivity)   | Mean:     0.15ms | Median:     0.15ms | Min:     0.15ms | Max:     0.15ms | Stdev:   0.00ms

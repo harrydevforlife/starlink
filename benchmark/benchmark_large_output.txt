@@ -1,0 +1,222 @@
+
+📁 File: /Users/lap15136/code/zds/labs/pydb/data/yellow_tripdata_2019-01.csv
+📊 Rows: ~7,667,792 (excluding header)
+
+🚀 Starlink Large File Benchmark Suite
+============================================================================================================================================
+File: /Users/lap15136/code/zds/labs/pydb/data/yellow_tripdata_2019-01.csv
+Estimated rows: ~7,667,792
+Iterations: 1
+Warmup: 0
+============================================================================================================================================
+
+📊 Benchmarking CSV Reading Operations...
+  Warming up: CSV: Read all columns (no projection)...
+  Benchmarking: CSV: Read all columns (no projection)...
+    Iteration 1/1...
+      Completed in 3.79s
+  Warming up: CSV: Read with projection (3 cols)...
+  Benchmarking: CSV: Read with projection (3 cols)...
+    Iteration 1/1...
+      Completed in 2.88s
+  Warming up: CSV: Read with projection (5 cols)...
+  Benchmarking: CSV: Read with projection (5 cols)...
+    Iteration 1/1...
+      Completed in 3.22s
+
+📊 Benchmarking Filtering Operations...
+  Warming up: Filter: passenger_count > 0...
+  Benchmarking: Filter: passenger_count > 0...
+    Iteration 1/1...
+      Completed in 46.47s
+  Warming up: Filter: passenger_count == 5...
+  Benchmarking: Filter: passenger_count == 5...
+    Iteration 1/1...
+      Completed in 40.85s
+  Warming up: Filter: fare_amount > 50...
+  Benchmarking: Filter: fare_amount > 50...
+    Iteration 1/1...
+      Completed in 43.25s
+
+📊 Benchmarking Aggregation Operations...
+  Warming up: Aggregate: GROUP BY passenger_count (SUM, MAX, MIN fare_amount)...
+  Benchmarking: Aggregate: GROUP BY passenger_count (SUM, MAX, MIN fare_amount)...
+    Iteration 1/1...
+      Completed in 166.39s
+  Warming up: Aggregate: GROUP BY VendorID (SUM, MAX fare_amount)...
+  Benchmarking: Aggregate: GROUP BY VendorID (SUM, MAX fare_amount)...
+    Iteration 1/1...
+      Completed in 89.09s
+  Warming up: Aggregate: Single group (SUM, MAX, MIN fare_amount)...
+  Benchmarking: Aggregate: Single group (SUM, MAX, MIN fare_amount)...
+    Iteration 1/1...
+      Completed in 123.96s
+
+📊 Benchmarking End-to-End Queries...
+  Warming up: E2E: Filter (passenger_count > 2) + Project...
+  Benchmarking: E2E: Filter (passenger_count > 2) + Project...
+    Iteration 1/1...
+      Completed in 38.73s
+  Warming up: E2E: Filter (fare_amount > 20) + Aggregate...
+  Benchmarking: E2E: Filter (fare_amount > 20) + Aggregate...
+    Iteration 1/1...
+      Completed in 57.39s
+  Warming up: E2E: Complex (Filter + Project + Aggregate)...
+  Benchmarking: E2E: Complex (Filter + Project + Aggregate)...
+    Iteration 1/1...
+      Completed in 92.27s
+
+============================================================================================================================================
+LARGE FILE BENCHMARK RESULTS (~7.6M rows)
+============================================================================================================================================
+Operation                                                    |     Mean (s) |   Median (s) |      Min (s) |      Max (s)
+--------------------------------------------------------------------------------------------------------------------------------------------
+Aggregate: GROUP BY VendorID (SUM, MAX fare_amount)          | Mean:    89.09s | Median:    89.09s | Min:    89.09s | Max:    89.09s
+Aggregate: GROUP BY passenger_count (SUM, MAX, MIN fare_amount) | Mean:   166.39s | Median:   166.39s | Min:   166.39s | Max:   166.39s
+Aggregate: Single group (SUM, MAX, MIN fare_amount)          | Mean:   123.96s | Median:   123.96s | Min:   123.96s | Max:   123.96s
+CSV: Read all columns (no projection)                        | Mean:     3.79s | Median:     3.79s | Min:     3.79s | Max:     3.79s
+CSV: Read with projection (3 cols)                           | Mean:     2.88s | Median:     2.88s | Min:     2.88s | Max:     2.88s
+CSV: Read with projection (5 cols)                           | Mean:     3.22s | Median:     3.22s | Min:     3.22s | Max:     3.22s
+E2E: Complex (Filter + Project + Aggregate)                  | Mean:    92.27s | Median:    92.27s | Min:    92.27s | Max:    92.27s
+E2E: Filter (fare_amount > 20) + Aggregate                   | Mean:    57.39s | Median:    57.39s | Min:    57.39s | Max:    57.39s
+E2E: Filter (passenger_count > 2) + Project                  | Mean:    38.73s | Median:    38.73s | Min:    38.73s | Max:    38.73s
+Filter: fare_amount > 50                                     | Mean:    43.25s | Median:    43.25s | Min:    43.25s | Max:    43.25s
+Filter: passenger_count == 5                                 | Mean:    40.85s | Median:    40.85s | Min:    40.85s | Max:    40.85s
+Filter: passenger_count > 0                                  | Mean:    46.47s | Median:    46.47s | Min:    46.47s | Max:    46.47s
+============================================================================================================================================
+
+✅ Benchmark completed!
+$ cd /Users/lap15136/code/zds/labs/pydb && cat << 'EOF'
+                                                       📊 Large File Benchmark Results Summary (~7.6M rows)
+
+                           ## 🎯 Performance Results:
+
+                                                     ### 1. CSV Reading (Very Fast ✅):
+       - **Read all columns**: 3.79s (~2M rows/sec)
+                                                   - **Read with projection (3 cols)**: 2.88s (~2.6M rows/sec)
+                              - **Read with projection (5 cols)**: 3.22s (~2.4M rows/sec)
+         - **Note**: Projection optimization (#8) đang hoạt động tốt!
+
+                                                                     ### 2. Filtering Operations (Moderate):
+                            - **passenger_count > 0**: 46.47s (~165K rows/sec)
+                                                                              - **passenger_count == 5**: 40.85s (~188K rows/sec)
+                                                 - **fare_amount > 50**: 43.25s (~177K rows/sec)
+                - **Note**: Có thể optimize thêm bằng cách cache cast expressions
+
+ ### 3. Aggregation Operations (Slowest):
+                                         - **GROUP BY passenger_count**: 166.39s (~46K rows/sec)
+                - **GROUP BY VendorID**: 89.09s (~86K rows/sec)
+                                                               - **Single group**: 123.96s (~62K rows/sec)
+                          - **Note**: Aggregation có overhead lớn, nhưng đã được optimize với batch processing
+
+                              ### 4. End-to-End Queries:
+                                                        - **Filter + Project**: 38.73s (~198K rows/sec)
+                       - **Filter + Aggregate**: 57.39s (~134K rows/sec)
+                                                                        - **Complex query**: 92.27s (~83K rows/sec)
+
+                                   ## 💡 Key Insights:
+
+                                                      1. ✅ **CSV Reading rất nhanh** - Optimizations (#3, #8) đang hoạt động tốt
+                                                 2. ⚠️ **Filtering có thể cải thiện** - Cast expressions được evaluate nhiều lần
+                                               3. ⚠️ **Aggregation là bottleneck** - Cần optimize thêm
+                     4. 📈 **Scalability tốt** - Performance tương đối ổn định với file lớn
+
+           ## 🎯 Recommendations:
+
+                                 1. **Cache cast expressions** - Tránh cast lại nhiều lần
+         2. **Optimize aggregation** - Có thể dùng PyArrow group_by nếu có
+                                                                          3. **Profile để tìm bottlenecks** - Xác định chính xác overhead ở đâu
+                                                               4. **Consider streaming** - Process batches song song nếu có thể
+
+                                               EOF
+
+📊 Large File Benchmark Results Summary (~7.6M rows)
+
+## 🎯 Performance Results:
+
+### 1. CSV Reading (Very Fast ✅):
+- **Read all columns**: 3.79s (~2M rows/sec)
+- **Read with projection (3 cols)**: 2.88s (~2.6M rows/sec)
+- **Read with projection (5 cols)**: 3.22s (~2.4M rows/sec)
+- **Note**: Projection optimization (#8) đang hoạt động tốt!
+
+### 2. Filtering Operations (Moderate):
+- **passenger_count > 0**: 46.47s (~165K rows/sec)
+- **passenger_count == 5**: 40.85s (~188K rows/sec)
+- **fare_amount > 50**: 43.25s (~177K rows/sec)
+- **Note**: Có thể optimize thêm bằng cách cache cast expressions
+
+### 3. Aggregation Operations (Slowest):
+- **GROUP BY passenger_count**: 166.39s (~46K rows/sec)
+- **GROUP BY VendorID**: 89.09s (~86K rows/sec)
+- **Single group**: 123.96s (~62K rows/sec)
+- **Note**: Aggregation có overhead lớn, nhưng đã được optimize với batch processing
+
+### 4. End-to-End Queries:
+- **Filter + Project**: 38.73s (~198K rows/sec)
+- **Filter + Aggregate**: 57.39s (~134K rows/sec)
+- **Complex query**: 92.27s (~83K rows/sec)
+
+## 💡 Key Insights:
+
+1. ✅ **CSV Reading rất nhanh** - Optimizations (#3, #8) đang hoạt động tốt
+2. ⚠️ **Filtering có thể cải thiện** - Cast expressions được evaluate nhiều lần
+3. ⚠️ **Aggregation là bottleneck** - Cần optimize thêm
+4. 📈 **Scalability tốt** - Performance tương đối ổn định với file lớn
+
+## 🎯 Recommendations:
+
+1. **Cache cast expressions** - Tránh cast lại nhiều lần
+2. **Optimize aggregation** - Có thể dùng PyArrow group_by nếu có
+3. **Profile để tìm bottlenecks** - Xác định chính xác overhead ở đâu
+4. **Consider streaming** - Process batches song song nếu có thể
+
+$ cd /Users/lap15136/code/zds/labs/pydb && echo "✅ Benchmark với file lớn (~7.6M rows) đã hoàn thành!
+
+                      📊 File: benchmark_large_file.py
+                                                      📁 Test file: data/yellow_tripdata_2019-01.csv (~7.6M rows)
+
+                                 📈 Results Highlights:
+                                                       - CSV Reading: ~3-4s (rất nhanh, ~2M rows/sec)
+                     - Filtering: ~40-46s (có thể optimize thêm)
+                                                                - Aggregation: ~89-166s (bottleneck chính)
+                          - E2E Queries: ~38-92s
+
+                                                💡 Key Findings:
+                                                                1. CSV reading optimizations (#3, #8) đang hoạt động tốt
+                                        2. Filtering có overhead từ cast expressions
+    3. Aggregation là bottleneck lớn nhất
+                                         4. Performance scales tốt với file lớn
+
+📝 Usage:
+           python benchmark_large_file.py [options]
+                                                     
+                                                     Options:
+                                                               --iterations N    Number of iterations (default: 3)
+                                    --warmup N        Warmup iterations (default: 1)
+      --output FILE     Save results to file"
+✅ Benchmark với file lớn (~7.6M rows) đã hoàn thành!
+
+📊 File: benchmark_large_file.py
+📁 Test file: data/yellow_tripdata_2019-01.csv (~7.6M rows)
+
+📈 Results Highlights:
+- CSV Reading: ~3-4s (rất nhanh, ~2M rows/sec)
+- Filtering: ~40-46s (có thể optimize thêm)
+- Aggregation: ~89-166s (bottleneck chính)
+- E2E Queries: ~38-92s
+
+💡 Key Findings:
+1. CSV reading optimizations (#3, #8) đang hoạt động tốt
+2. Filtering có overhead từ cast expressions
+3. Aggregation là bottleneck lớn nhất
+4. Performance scales tốt với file lớn
+
+📝 Usage:
+  python benchmark_large_file.py [options]
+  
+Options:
+  --iterations N    Number of iterations (default: 3)
+  --warmup N        Warmup iterations (default: 1)
+  --output FILE     Save results to file
+$ 

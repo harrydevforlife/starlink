@@ -18,13 +18,18 @@ This project was inspired by [How Query Engines Work](https://howqueryengineswor
 
 Special thanks to Andy Grove and [How Query Engines Work](https://howqueryengineswork.com/00-introduction.html) for inspiring this project. The book provides a comprehensive introduction to query engines, and Starlink aims to make these concepts accessible to Python developers through a clean, educational implementation.
 
+## Starlink's further implementation
+- Supported join types: inner join
+- Supported SQL alias expr.
+- Supported filter pushdown.
+
 ## Quick Start
 
 ### Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/starlink.git
+git clone https://github.com/harrydevforlife/starlink.git
 cd starlink
 
 # Install dependencies
@@ -68,6 +73,20 @@ print(df.optimizedPlan().pretty())
 # Execute and get results
 result = ctx.execute(df)
 result.to_markdown()
+```
+
+For join operations, you can use the `join` method:
+```sql
+SELECT
+    c.name,
+    c.city,
+    o.order_id,
+    o.total
+FROM customers AS c
+JOIN orders AS o
+    ON c.customer_id = o.order_customer_id
+WHERE CAST(o.total AS DOUBLE) > 30
+    AND c.city = 'New York'
 ```
 
 #### Using DataFrame API
@@ -143,6 +162,7 @@ Projection: #0, #1
 
 **Optimization Rules:**
 - **Projection Pushdown** - Only read columns that are actually needed
+- **Predicate Pushdown** - Only read rows that are actually needed
 - More rules can be added following the `OptimizerRule` interface
 
 ### 4. Physical Planning (`queryplanner/`)
@@ -191,7 +211,7 @@ results = physical_plan.execute()
 **Supported Formats:**
 - **CSV** (`csv.py`) - With automatic delimiter detection, header support
 - **Parquet** (`parquet.py`) - Efficient columnar format
-- **Memory** (`memory.py`) - In-memory data sources
+- **Memory** (`memory.py`) - In-memory data sources. Just for testing.
 
 ## Key Concepts
 
@@ -223,7 +243,7 @@ This format enables:
 
 A key optimization that pushes column selection down to the data source:
 
-```python
+```text
 # Without optimization: Read all columns, then filter
 Scan: tripdata; projection=None  # Reads all 18 columns
 
@@ -232,6 +252,18 @@ Scan: tripdata; projection=[passenger_count, fare_amount]  # Reads only 2 column
 ```
 
 This dramatically reduces I/O and memory usage for wide tables.
+
+### Predicate Pushdown
+
+A key optimization that pushes filter selection down to the data source:
+
+```text
+# Without optimization: Read all columns, then filter
+Scan: tripdata; filter=None  # Reads all 18 columns
+
+# With optimization: Only read needed columns
+Scan: tripdata; filter=CAST(#total AS double) > 30  # Reads only 2 columns
+```
 
 ## Project Structure
 
@@ -281,7 +313,7 @@ class MyDataSource(DataSource):
         # Return schema
         pass
     
-    def scan(self, projection: List[str]) -> Sequence[RecordBatch]:
+    def scan(self, projection: List[str], filter: Optional[Expression] = None) -> Sequence[RecordBatch]:
         # Return RecordBatch stream
         pass
 ```
@@ -343,11 +375,12 @@ Contributions are welcome! Areas where help is needed:
 - [How Query Engines Work](https://howqueryengineswork.com/) - The book that inspired this project
 - [Apache Arrow Documentation](https://arrow.apache.org/docs/)
 - [PyArrow Documentation](https://arrow.apache.org/docs/python/)
+- [NYC Dataset](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page)
 
 ## Roadmap
 
-- [ ] Additional SQL features (JOINs, subqueries, etc.)
-- [ ] More optimization rules (predicate pushdown, etc.)
+- [x] Additional SQL features (JOINs, subqueries, etc.). Inner join is supported.
+- [x] More optimization rules (predicate pushdown, etc.). Already implemented projection pushdown, predicate pushdown.
 - [ ] Additional data sources (JSON, database connectors)
 - [ ] Query execution statistics
 - [ ] Better error messages
@@ -355,7 +388,7 @@ Contributions are welcome! Areas where help is needed:
 
 ---
 
-**Happy Querying!**
+**Happy Querying and Exploring!**
 
 *Starlink - Making query engines understandable, one Python line at a time.*
 # starlink
