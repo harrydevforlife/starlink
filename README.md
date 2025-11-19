@@ -55,7 +55,7 @@ ctx.register_csv("tripdata", Path("data/yellow_tripdata_2019-01.csv"))
 df = ctx.sql("""
     SELECT 
         passenger_count, 
-        MAX(fare_amount) 
+        MAX(fare_amount) AS max_fare
     FROM tripdata 
     GROUP BY passenger_count
 """)
@@ -75,7 +75,7 @@ result.to_markdown()
 The output will be like this:
 ```text
 Original Plan:
-Projection: #0, #1
+Projection: #0, #1 as max_fare
         Aggregate: groupExpr=[#passenger_count], aggregateExpr=[MAX(#fare_amount)]
                 Selection: CAST(#fare_amount AS double) > 80
                         Projection: #passenger_count, #fare_amount
@@ -83,22 +83,22 @@ Projection: #0, #1
 
 
 Optimized Plan:
-Projection: #0, #1
+Projection: #0, #1 as max_fare
         Aggregate: groupExpr=[#passenger_count], aggregateExpr=[MAX(#fare_amount)]
                 Projection: #passenger_count, #fare_amount
                         Scan: data/yellow_tripdata_2019-01.csv; projection=[passenger_count, fare_amount], filter=CAST(#fare_amount AS double) > 80
 
-|   passenger_count |   MAX |
-|-------------------|-------|
-|                 1 | 99.99 |
-|                 2 | 99.75 |
-|                 4 | 99    |
-|                 5 | 99.5  |
-|                 6 | 98    |
-|                 3 | 99.75 |
-|                 0 | 99    |
-|                 8 | 87    |
-|                 9 | 92    |
+|   passenger_count |   max_fare |
+|-------------------|------------|
+|                 1 |      99.99 |
+|                 2 |      99.75 |
+|                 4 |      99    |
+|                 5 |      99.5  |
+|                 6 |      98    |
+|                 3 |      99.75 |
+|                 0 |      99    |
+|                 8 |      87    |
+|                 9 |      92    |
 
 (9 row(s) shown)
 ```

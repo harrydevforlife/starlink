@@ -11,7 +11,7 @@ ctx.register_csv("tripdata", Path("data/yellow_tripdata_2019-01.csv"))
 df = ctx.sql("""
     SELECT 
         passenger_count, 
-        MAX(fare_amount) 
+        MAX(fare_amount) AS max_fare
     FROM tripdata
     WHERE CAST(fare_amount AS DOUBLE) > 80
     GROUP BY passenger_count
