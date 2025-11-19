@@ -74,6 +74,37 @@ print(df.optimizedPlan().pretty())
 result = ctx.execute(df)
 result.to_markdown()
 ```
+The output will be like this:
+```text
+Original Plan:
+Projection: #0, #1
+        Aggregate: groupExpr=[#passenger_count], aggregateExpr=[MAX(#fare_amount)]
+                Selection: CAST(#fare_amount AS double) > 80
+                        Projection: #passenger_count, #fare_amount
+                                Scan: data/yellow_tripdata_2019-01.csv; projection=None
+
+
+Optimized Plan:
+Projection: #0, #1
+        Aggregate: groupExpr=[#passenger_count], aggregateExpr=[MAX(#fare_amount)]
+                Projection: #passenger_count, #fare_amount
+                        Scan: data/yellow_tripdata_2019-01.csv; projection=[passenger_count, fare_amount], filter=CAST(#fare_amount AS double) > 80
+
+|   passenger_count |   MAX |
+|-------------------|-------|
+|                 1 | 99.99 |
+|                 2 | 99.75 |
+|                 4 | 99    |
+|                 5 | 99.5  |
+|                 6 | 98    |
+|                 3 | 99.75 |
+|                 0 | 99    |
+|                 8 | 87    |
+|                 9 | 92    |
+
+(9 row(s) shown)
+```
+
 
 For join operations, you can use the `join` method:
 ```sql
