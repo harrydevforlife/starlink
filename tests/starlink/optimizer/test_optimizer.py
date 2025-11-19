@@ -147,11 +147,12 @@ class TestOptimizer:
 
         optimized = Optimizer().optimize(plan)
 
-        assert isinstance(optimized, Join)
-        assert optimized.left.filter is not None
-        assert optimized.right.filter is not None
-        assert str(optimized.left.filter) == "#city = 'NY'"
-        assert str(optimized.right.filter) == "#total > 50000"
+        join_op = optimized
+        assert isinstance(join_op, Join)
+        assert join_op.left.filter is not None
+        assert join_op.right.filter is not None
+        assert str(join_op.left.filter) == "#city = 'NY'"
+        assert str(join_op.right.filter) == "#total > 50000"
 
     def test_projection_pushdown_over_join_preserves_keys(self):
         """Projection pushdown keeps join keys even if not in final output."""

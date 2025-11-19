@@ -59,15 +59,15 @@ class CastExpr(LogicalExpr):
 class BinaryExpr(LogicalExpr):
     """Create a binary expression from a name, an operator, and two expressions."""
 
-    def __init__(self, name: str, op: str, l: LogicalExpr, r: LogicalExpr):
+    def __init__(self, name: str, op: str, left: LogicalExpr, right: LogicalExpr):
         self.name = name
         self.op = op
-        self.l = l
-        self.r = r
+        self.left = left
+        self.right = right
 
     def __str__(self) -> str:
         """String representation of the binary expression."""
-        return f"{self.l} {self.op} {self.r}"
+        return f"{self.left} {self.op} {self.right}"
 
 
 class UnaryExpr(LogicalExpr):
@@ -105,57 +105,57 @@ class BooleanBinaryExpr(BinaryExpr):
 class And(BooleanBinaryExpr):
     """Create an AND logical expression from two expressions."""
 
-    def __init__(self, l: LogicalExpr, r: LogicalExpr):
-        super().__init__("and", "AND", l, r)
+    def __init__(self, left: LogicalExpr, right: LogicalExpr):
+        super().__init__("and", "AND", left, right)
 
 
 class Or(BooleanBinaryExpr):
     """Create an OR logical expression from two expressions."""
 
-    def __init__(self, l: LogicalExpr, r: LogicalExpr):
-        super().__init__("or", "OR", l, r)
+    def __init__(self, left: LogicalExpr, right: LogicalExpr):
+        super().__init__("or", "OR", left, right)
 
 
 class Eq(BooleanBinaryExpr):
     """Create an equality (==) logical expression from two expressions."""
 
-    def __init__(self, l: LogicalExpr, r: LogicalExpr):
-        super().__init__("eq", "=", l, r)
+    def __init__(self, left: LogicalExpr, right: LogicalExpr):
+        super().__init__("eq", "=", left, right)
 
 
 class Neq(BooleanBinaryExpr):
     """Create a not-equal (!=) logical expression from two expressions."""
 
-    def __init__(self, l: LogicalExpr, r: LogicalExpr):
-        super().__init__("neq", "!=", l, r)
+    def __init__(self, left: LogicalExpr, right: LogicalExpr):
+        super().__init__("neq", "!=", left, right)
 
 
 class Gt(BooleanBinaryExpr):
     """Create a greater-than (>) logical expression from two expressions."""
 
-    def __init__(self, l: LogicalExpr, r: LogicalExpr):
-        super().__init__("gt", ">", l, r)
+    def __init__(self, left: LogicalExpr, right: LogicalExpr):
+        super().__init__("gt", ">", left, right)
 
 
 class GtEq(BooleanBinaryExpr):
     """Create a greater-than-or-equal (>=) logical expression from two expressions."""
 
-    def __init__(self, l: LogicalExpr, r: LogicalExpr):
-        super().__init__("gteq", ">=", l, r)
+    def __init__(self, left: LogicalExpr, right: LogicalExpr):
+        super().__init__("gteq", ">=", left, right)
 
 
 class Lt(BooleanBinaryExpr):
     """Create a less-than (<) logical expression from two expressions."""
 
-    def __init__(self, l: LogicalExpr, r: LogicalExpr):
-        super().__init__("lt", "<", l, r)
+    def __init__(self, left: LogicalExpr, right: LogicalExpr):
+        super().__init__("lt", "<", left, right)
 
 
 class LtEq(BooleanBinaryExpr):
     """Create a less-than-or-equal (<=) logical expression from two expressions."""
 
-    def __init__(self, l: LogicalExpr, r: LogicalExpr):
-        super().__init__("lteq", "<=", l, r)
+    def __init__(self, left: LogicalExpr, right: LogicalExpr):
+        super().__init__("lteq", "<=", left, right)
 
 
 class MathExpr(BinaryExpr):
@@ -163,42 +163,42 @@ class MathExpr(BinaryExpr):
 
     def to_field(self, input: LogicalPlan) -> Field:
         """Return a schema field for mathematical expression, using left operand's datatype."""
-        return Field(self.name, self.l.to_field(input).dataType)
+        return Field(self.name, self.left.to_field(input).dataType)
 
 
 class Add(MathExpr):
     """Create an addition (+) expression from two expressions."""
 
-    def __init__(self, l: LogicalExpr, r: LogicalExpr):
-        super().__init__("add", "+", l, r)
+    def __init__(self, left: LogicalExpr, right: LogicalExpr):
+        super().__init__("add", "+", left, right)
 
 
 class Subtract(MathExpr):
     """Create a subtraction (-) expression from two expressions."""
 
-    def __init__(self, l: LogicalExpr, r: LogicalExpr):
-        super().__init__("subtract", "-", l, r)
+    def __init__(self, left: LogicalExpr, right: LogicalExpr):
+        super().__init__("subtract", "-", left, right)
 
 
 class Multiply(MathExpr):
     """Create a multiplication (*) expression from two expressions."""
 
-    def __init__(self, l: LogicalExpr, r: LogicalExpr):
-        super().__init__("mult", "*", l, r)
+    def __init__(self, left: LogicalExpr, right: LogicalExpr):
+        super().__init__("mult", "*", left, right)
 
 
 class Divide(MathExpr):
     """Create a division (/) expression from two expressions."""
 
-    def __init__(self, l: LogicalExpr, r: LogicalExpr):
-        super().__init__("div", "/", l, r)
+    def __init__(self, left: LogicalExpr, right: LogicalExpr):
+        super().__init__("div", "/", left, right)
 
 
 class Modulus(MathExpr):
     """Create a modulus (%) expression from two expressions."""
 
-    def __init__(self, l: LogicalExpr, r: LogicalExpr):
-        super().__init__("mod", "%", l, r)
+    def __init__(self, left: LogicalExpr, right: LogicalExpr):
+        super().__init__("mod", "%", left, right)
 
 
 class Alias(LogicalExpr):

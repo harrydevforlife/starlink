@@ -24,9 +24,9 @@ class SqlIdentifier(SqlExpr):
 class SqlBinaryExpr(SqlExpr):
     """Binary expression."""
 
-    l: SqlExpr
+    left: SqlExpr
     op: str
-    r: SqlExpr
+    right: SqlExpr
 
     def __str__(self) -> str:
         return f"{self.l} {self.op} {self.r}"

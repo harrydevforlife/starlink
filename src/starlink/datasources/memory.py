@@ -3,8 +3,7 @@ from starlink.datasources.datasource import DataSource
 from starlink.datatypes.record_batch import RecordBatch
 from starlink.datatypes.schema import Schema
 from starlink.physicalplan.expressions.expr import Expression
-from starlink.datatypes.arrow_field_vector import ArrowFieldVector
-import pyarrow as pa
+
 
 class InMemoryDataSource(DataSource):
     def __init__(self, schema: Schema, data: List[RecordBatch]):

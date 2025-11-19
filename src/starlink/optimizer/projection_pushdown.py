@@ -1,6 +1,6 @@
 
 
-from typing import List, Set, OrderedDict
+from typing import OrderedDict
 
 from starlink.logicalplan.logical import LogicalPlan
 from starlink.logicalplan.projection import Projection

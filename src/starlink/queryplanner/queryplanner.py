@@ -1,7 +1,3 @@
-from typing import List
-
-import pyarrow as pa
-
 from starlink.datatypes.schema import Schema
 from starlink.logicalplan.logical import LogicalPlan
 from starlink.logicalplan.scan import Scan
@@ -151,32 +147,32 @@ class QueryPlanner:
         if isinstance(expr, CastExpr):
             return CastExpression(self.create_physical_expr(expr.expr, input), expr.dataType)
         if isinstance(expr, BinaryExpr):
-            l = self.create_physical_expr(expr.l, input)
-            r = self.create_physical_expr(expr.r, input)
+            left = self.create_physical_expr(expr.left, input)
+            right = self.create_physical_expr(expr.right, input)
             if isinstance(expr, Eq):
-                return EqExpression(l, r)
+                return EqExpression(left, right)
             if isinstance(expr, Neq):
-                return NeqExpression(l, r)
+                return NeqExpression(left, right)
             if isinstance(expr, Gt):
-                return GtExpression(l, r)
+                return GtExpression(left, right)
             if isinstance(expr, GtEq):
-                return GtEqExpression(l, r)
+                return GtEqExpression(left, right)
             if isinstance(expr, Lt):
-                return LtExpression(l, r)
+                return LtExpression(left, right)
             if isinstance(expr, LtEq):
-                return LtEqExpression(l, r)
+                return LtEqExpression(left, right)
             if isinstance(expr, And):
-                return AndExpression(l, r)
+                return AndExpression(left, right)
             if isinstance(expr, Or):
-                return OrExpression(l, r)
+                return OrExpression(left, right)
             if isinstance(expr, Add):
-                return AddExpression(l, r)
+                return AddExpression(left, right)
             if isinstance(expr, Subtract):
-                return SubtractExpression(l, r)
+                return SubtractExpression(left, right)
             if isinstance(expr, Multiply):
-                return MultiplyExpression(l, r)
+                return MultiplyExpression(left, right)
             if isinstance(expr, Divide):
-                return DivideExpression(l, r)
+                return DivideExpression(left, right)
             raise ValueError(f"Unsupported binary expression: {expr}")
 
         print(f"Unsupported logical expression: {expr}")

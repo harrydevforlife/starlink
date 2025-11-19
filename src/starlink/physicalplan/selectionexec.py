@@ -4,7 +4,6 @@ import pyarrow as pa
 
 from starlink.datatypes.record_batch import RecordBatch
 from starlink.datatypes.schema import Schema
-from starlink.datatypes.column_vector import ColumnVector
 from starlink.datatypes.arrow_field_vector import ArrowFieldVector
 from starlink.physicalplan.expressions.expr import Expression
 from starlink.physicalplan.physical import PhysicalPlan

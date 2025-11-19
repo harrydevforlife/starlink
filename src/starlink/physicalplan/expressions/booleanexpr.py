@@ -1,10 +1,9 @@
-from typing import Any, List
+from typing import Any
 
 import pyarrow as pa
 import pyarrow.compute as pc
 
 from starlink.datatypes.column_vector import ColumnVector
-from starlink.datatypes.record_batch import RecordBatch
 from starlink.datatypes.arrow_field_vector import ArrowFieldVector
 from starlink.datatypes.literal_value_vector import LiteralValueVector
 from starlink.physicalplan.expressions.expr import Expression
@@ -18,10 +17,10 @@ class BooleanExpression(BinaryExpression):
     which are highly optimized C++ kernels that eliminate Python loop overhead.
     """
 
-    def __init__(self, l: Expression, r: Expression):
-        super().__init__(l, r)
+    def __init__(self, left: Expression, right: Expression):
+        super().__init__(left, right)
 
-    def evaluate_pair(self, l: ColumnVector, r: ColumnVector) -> ColumnVector:
+    def evaluate_pair(self, left: ColumnVector, right: ColumnVector) -> ColumnVector:
         """Evaluate boolean expression using vectorized PyArrow compute operations.
 
         This method extracts PyArrow arrays from ColumnVectors and uses
@@ -32,21 +31,21 @@ class BooleanExpression(BinaryExpression):
         # Extract PyArrow arrays from ColumnVector
         # Handle both ArrowFieldVector and LiteralValueVector
         # Convert LiteralValueVector to ArrowFieldVector for vectorized operations
-        if isinstance(l, LiteralValueVector):
+        if isinstance(left, LiteralValueVector):
             # Convert literal to PyArrow array (broadcast value to match size)
-            left_array = pa.array([l.value] * l.size(), type=l.dataType)
-        elif isinstance(l, ArrowFieldVector):
-            left_array = l.field
+            left_array = pa.array([left.value] * left.size(), type=left.dataType)
+        elif isinstance(left, ArrowFieldVector):
+            left_array = left.field
         else:
-            raise ValueError(f"BooleanExpression requires ArrowFieldVector or LiteralValueVector, got {type(l)}")
+            raise ValueError(f"BooleanExpression requires ArrowFieldVector or LiteralValueVector, got {type(left)}")
 
-        if isinstance(r, LiteralValueVector):
+        if isinstance(right, LiteralValueVector):
             # Convert literal to PyArrow array (broadcast value to match size)
-            right_array = pa.array([r.value] * r.size(), type=r.dataType)
-        elif isinstance(r, ArrowFieldVector):
-            right_array = r.field
+            right_array = pa.array([right.value] * right.size(), type=right.dataType)
+        elif isinstance(right, ArrowFieldVector):
+            right_array = right.field
         else:
-            raise ValueError(f"BooleanExpression requires ArrowFieldVector or LiteralValueVector, got {type(r)}")
+            raise ValueError(f"BooleanExpression requires ArrowFieldVector or LiteralValueVector, got {type(right)}")
 
         # Handle ChunkedArray by combining chunks into a single Array
         if isinstance(left_array, pa.ChunkedArray):

@@ -7,7 +7,6 @@ from starlink.datatypes.record_batch import RecordBatch
 from starlink.datatypes.literal_value_vector import LiteralValueVector
 from starlink.datatypes.arrow_field_vector import ArrowFieldVector
 from starlink.physicalplan.expressions.expr import Expression
-from starlink.physicalplan.expressions.castexpr import CastExpression
 
 
 class BinaryExpression(Expression, ABC):
@@ -19,13 +18,13 @@ class BinaryExpression(Expression, ABC):
     Automatically coerces compatible numeric types (int to float when needed).
     """
 
-    def __init__(self, l: Expression, r: Expression):
-        self.l = l
-        self.r = r
+    def __init__(self, left: Expression, right: Expression):
+        self.left = left
+        self.right = right
 
     def evaluate(self, input: RecordBatch) -> ColumnVector:
-        left_vec = self.l.evaluate(input)
-        right_vec = self.r.evaluate(input)
+        left_vec = self.left.evaluate(input)
+        right_vec = self.right.evaluate(input)
         assert left_vec.size() == right_vec.size()
         
         left_type = left_vec.get_type()
@@ -94,7 +93,6 @@ class BinaryExpression(Expression, ABC):
         else:
             # For non-literals, use CastExpression to do the coercion
             # We need to create a temporary expression that evaluates to the cast
-            from starlink.physicalplan.expressions.colexpr import ColumnExpression
             # This is a bit tricky - we need to cast the vector
             # For now, let's use a simple approach: if it's an ArrowFieldVector, cast it
             if isinstance(vec, ArrowFieldVector):
@@ -111,5 +109,5 @@ class BinaryExpression(Expression, ABC):
                 raise ValueError(f"Cannot coerce {type(vec)} to {target_type}")
 
     @abstractmethod
-    def evaluate_pair(self, l: ColumnVector, r: ColumnVector) -> ColumnVector:
+    def evaluate_pair(self, left: ColumnVector, right: ColumnVector) -> ColumnVector:
         pass

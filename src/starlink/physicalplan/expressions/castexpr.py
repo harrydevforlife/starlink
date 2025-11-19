@@ -120,7 +120,7 @@ class CastExpression(Expression):
                 return builder.build()
 
             return ArrowFieldVector(result)
-        except Exception as e:
+        except Exception:
             # If PyArrow cast fails, fall back to row-by-row conversion
             # This ensures backward compatibility
             builder = ArrowVectorBuilder(self.dataType)

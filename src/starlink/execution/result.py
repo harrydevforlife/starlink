@@ -232,7 +232,7 @@ class QueryResult:
             # Try to get count without consuming generator
             try:
                 total_rows = sum(batch.row_count() for batch in self._batches)
-            except:
+            except Exception:
                 total_rows = "?"
         
         return f"QueryResult(rows={total_rows}, columns={column_names})"

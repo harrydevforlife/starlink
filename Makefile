@@ -8,8 +8,9 @@ benchmark: prepare
 run-tests: prepare
 	uv run pytest tests/
 
-run-coverage: prepare
-	uv run pytest --cov=src/starlink tests/
+run-lint: prepare
+	uv run ruff check src/starlink
 
-run-coverage-html: prepare
-	uv run pytest --cov=src/starlink tests/ --cov-report=html
+sure-no-wrong: run-tests run-lint
+	echo "No wrong"
+

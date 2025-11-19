@@ -302,7 +302,7 @@ class CsvDataSource(DataSource):
                 fields = [Field(f"field_{i+1}", pa.string()) for i in range(num_cols)]
 
             return Schema(fields)
-        except Exception as e:
+        except Exception:
             # Fallback: try reading first line manually
             # This handles edge cases where PyArrow might fail
             with open(self.filename, 'r', encoding='utf-8') as f:

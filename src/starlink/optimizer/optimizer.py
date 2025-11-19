@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Set, OrderedDict
+from typing import List, OrderedDict
 
 from starlink.logicalplan.logical import LogicalPlan
 from starlink.logicalplan.expr import LogicalExpr
@@ -70,8 +70,8 @@ def extractColumn(expr: LogicalExpr, input: LogicalPlan, accum: OrderedDict) -> 
         if expr.name not in accum:
             accum[expr.name] = None  # Use OrderedDict to preserve insertion order
     elif isinstance(expr, BinaryExpr):
-        extractColumn(expr.l, input, accum)
-        extractColumn(expr.r, input, accum)
+        extractColumn(expr.left, input, accum)
+        extractColumn(expr.right, input, accum)
     elif isinstance(expr, Alias):
         extractColumn(expr.expr, input, accum)
     elif isinstance(expr, CastExpr):

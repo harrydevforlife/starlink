@@ -1,6 +1,6 @@
 
 from abc import ABC, abstractmethod
-from typing import List, Sequence, Iterator
+from typing import List, Sequence
 
 from starlink.datatypes.schema import Schema
 from starlink.datatypes.record_batch import RecordBatch

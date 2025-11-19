@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List, Sequence, Iterator, Optional, Union
+from typing import List, Sequence, Iterator, Optional
 
 import pyarrow as pa
 import pyarrow.dataset as ds
@@ -95,7 +95,7 @@ class ParquetDataSource(DataSource):
                 # Note: We don't validate the filter here to avoid overhead
                 # If the filter is invalid, PyArrow will throw an error when we create the scanner
                 # We'll catch it then and fall back to post-read filtering
-            except Exception as e:
+            except Exception:
                 # If conversion fails, fall back to post-read filtering
                 # This can happen for unsupported expression types (e.g., complex casts)
                 pa_filter = None
@@ -111,7 +111,7 @@ class ParquetDataSource(DataSource):
                     filter=current_filter,  # PyArrow Dataset filter (uses row group statistics)
                     batch_size=self.batch_size,
                 )
-            except (pa.lib.ArrowNotImplementedError, pa.lib.ArrowInvalid) as e:
+            except (pa.lib.ArrowNotImplementedError, pa.lib.ArrowInvalid):
                 # Filter contains unsupported operations, fall back to post-read filtering
                 # Create scanner without filter
                 scanner = dataset.scanner(
@@ -193,11 +193,11 @@ class ParquetDataSource(DataSource):
                         # But fails for unsupported casts (e.g., timestamp -> double)
                         cast_result = inner_expr.cast(expr.dataType)
                         return cast_result
-                    except (pa.lib.ArrowNotImplementedError, pa.lib.ArrowInvalid) as e:
+                    except (pa.lib.ArrowNotImplementedError, pa.lib.ArrowInvalid):
                         # PyArrow Dataset API doesn't support this cast in filters
                         # Fall back to post-read filtering
                         return None
-                    except Exception as e:
+                    except Exception:
                         # Other errors - also fall back
                         return None
                 else:

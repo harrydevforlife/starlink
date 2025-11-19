@@ -1,4 +1,4 @@
-from typing import Any, Optional, Protocol, Sequence, Union
+from typing import Any, Protocol
 
 import pyarrow as pa
 

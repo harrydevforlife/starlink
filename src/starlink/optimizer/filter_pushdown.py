@@ -154,7 +154,7 @@ class FilterPushDownRule(OptimizerRule):
     def _split_conjuncts(self, expr: LogicalExpr) -> List[LogicalExpr]:
         """Split a predicate into a list of conjunctive predicates."""
         if isinstance(expr, And):
-            return self._split_conjuncts(expr.l) + self._split_conjuncts(expr.r)
+            return self._split_conjuncts(expr.left) + self._split_conjuncts(expr.right)
         return [expr]
 
     def _combine_conjuncts(self, predicates: List[LogicalExpr]) -> Optional[LogicalExpr]:

@@ -9,7 +9,7 @@ from typing import Dict, List, Set, Tuple
 
 import pyarrow as pa
 
-from starlink.logicalplan.dataframe import DataFrame, DataFrameImpl
+from starlink.logicalplan.dataframe import DataFrame
 from starlink.logicalplan.expressions import (
     AggregateExpr,
     Alias,
@@ -278,11 +278,11 @@ class SqlPlanner:
         """Extract join column names from ON clause."""
         if not isinstance(condition, SqlBinaryExpr) or condition.op != "=":
             raise ValueError("Only equality join conditions are supported")
-        if not isinstance(condition.l, SqlIdentifier) or not isinstance(condition.r, SqlIdentifier):
+        if not isinstance(condition.left, SqlIdentifier) or not isinstance(condition.right, SqlIdentifier):
             raise ValueError("Join condition must compare two column identifiers")
 
-        left_side, left_column = self._resolve_relation_column(condition.l, left_info, right_info)
-        right_side, right_column = self._resolve_relation_column(condition.r, left_info, right_info)
+        left_side, left_column = self._resolve_relation_column(condition.left, left_info, right_info)
+        right_side, right_column = self._resolve_relation_column(condition.right, left_info, right_info)
 
         if left_side == right_side:
             raise ValueError("Join condition must reference both relations")
@@ -441,8 +441,8 @@ class SqlPlanner:
         elif isinstance(expr, Alias):
             self.visit(expr.expr, accumulator)
         elif isinstance(expr, BinaryExpr):
-            self.visit(expr.l, accumulator)
-            self.visit(expr.r, accumulator)
+            self.visit(expr.left, accumulator)
+            self.visit(expr.right, accumulator)
         elif isinstance(expr, CastExpr):
             self.visit(expr.expr, accumulator)
         elif isinstance(expr, AggregateExpr):
@@ -471,38 +471,38 @@ class SqlPlanner:
         elif isinstance(expr, SqlDouble):
             return LiteralDouble(expr.value)
         elif isinstance(expr, SqlBinaryExpr):
-            l = self.create_logical_expr(expr.l, input)
-            r = self.create_logical_expr(expr.r, input)
+            left = self.create_logical_expr(expr.left, input)
+            right = self.create_logical_expr(expr.right, input)
             op = expr.op
             # Comparison operators
             if op == "=":
-                return Eq(l, r)
+                return Eq(left, right)
             elif op == "!=":
-                return Neq(l, r)
+                return Neq(left, right)
             elif op == ">":
-                return Gt(l, r)
+                return Gt(left, right)
             elif op == ">=":
-                return GtEq(l, r)
+                return GtEq(left, right)
             elif op == "<":
-                return Lt(l, r)
+                return Lt(left, right)
             elif op == "<=":
-                return LtEq(l, r)
+                return LtEq(left, right)
             # Boolean operators
             elif op == "AND":
-                return And(l, r)
+                return And(left, right)
             elif op == "OR":
-                return Or(l, r)
+                return Or(left, right)
             # Math operators
             elif op == "+":
-                return Add(l, r)
+                return Add(left, right)
             elif op == "-":
-                return Subtract(l, r)
+                return Subtract(left, right)
             elif op == "*":
-                return Multiply(l, r)
+                return Multiply(left, right)
             elif op == "/":
-                return Divide(l, r)
+                return Divide(left, right)
             elif op == "%":
-                return Modulus(l, r)
+                return Modulus(left, right)
             else:
                 raise ValueError(f"Invalid operator {op}")
         elif isinstance(expr, SqlAlias):
