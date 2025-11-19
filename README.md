@@ -148,7 +148,7 @@ Starlink demonstrates the complete query execution pipeline. Here's how a query 
 **Input:** SQL string  
 **Output:** Abstract Syntax Tree (AST)
 
-```python
+```text
 # SQL: "SELECT passenger_count, MAX(fare_amount) FROM tripdata GROUP BY passenger_count"
 # ↓
 # SqlSelect AST with projection, table, and groupBy information
@@ -164,7 +164,7 @@ Starlink demonstrates the complete query execution pipeline. Here's how a query 
 **Input:** SQL AST  
 **Output:** Logical Plan (what to do, not how)
 
-```python
+```text
 # Logical Plan represents the "what" - high-level operations
 Projection: #0, #1
     Aggregate: groupExpr=[#passenger_count], aggregateExpr=[MAX(#fare_amount)]
@@ -183,7 +183,7 @@ Projection: #0, #1
 **Input:** Logical Plan  
 **Output:** Optimized Logical Plan
 
-```python
+```text
 # Optimizer applies rules to improve the plan
 # Example: Projection Pushdown
 Projection: #0, #1
@@ -201,7 +201,7 @@ Projection: #0, #1
 **Input:** Optimized Logical Plan  
 **Output:** Physical Plan (how to execute)
 
-```python
+```text
 # Physical Plan represents the "how" - concrete execution steps
 HashAggregateExec: groupExpr=[ColumnExpression(0)], aggregateExpr=[MaxExpression(ColumnExpression(1))]
     ScanExec: projection=[passenger_count, fare_amount]
@@ -223,8 +223,11 @@ HashAggregateExec: groupExpr=[ColumnExpression(0)], aggregateExpr=[MaxExpression
 ```python
 # Physical operators execute the plan
 # Each operator produces RecordBatch objects (columnar data)
-results = physical_plan.execute()
+results = physical_plan.execute_batches()
 # Returns: Sequence[RecordBatch]
+
+results = ctx.execute(df)
+# Returns: QueryResult
 ```
 
 **Execution Flow:**
@@ -318,6 +321,8 @@ Check out the `examples/` directory for more examples:
 - `query_csv.py` - DataFrame API with CSV
 - `query_parquet.py` - Parquet file queries
 - `query_count.py` - COUNT aggregation examples
+- `query_sql_join.py` - SQL join examples
+- `queries.py` - SQL query examples
 
 ## Extending Starlink
 
@@ -374,6 +379,8 @@ Starlink is designed for **educational purposes** and focuses on **clarity over 
 - Projection pushdown optimization
 - Efficient batch processing
 - Memory-efficient streaming
+
+[Benchmarking results](benchmark/BENCHMARK_RESULTS.md) for more details.
 
 For production use, consider:
 - [Apache Arrow DataFusion](https://github.com/apache/arrow-datafusion) (Rust)
